@@ -30,7 +30,6 @@ class RegisterViewController: UIViewController {
   
     @IBAction func registerPressed(_ sender: AnyObject) {
         
-
         
         //TODO: Set up a new user on our Firbase database
         Auth.auth().createUser(withEmail: emailTextfield.text!, password: passwordTextfield.text!) { (user, error) in
@@ -40,6 +39,7 @@ class RegisterViewController: UIViewController {
             } else {
                 //success
                 print("Registered successful!")
+                self.performSegue(withIdentifier: "goToChat", sender: self)
             }
         }
         
