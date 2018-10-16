@@ -34,6 +34,25 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }
+    
+    
+    
+    //MRK - TableView Delegate Methods
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("\(itemArray[indexPath.row])")
+        
+        // add/remove checkmark for selecting and deselection cell
+        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+        }
+        
+        //deselect the row after gets selected each time to remove the gray background 
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+    }
 
 
 }
