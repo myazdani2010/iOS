@@ -11,13 +11,27 @@ import UIKit
 //UITableViewController manages the table and takes care of delegate as well
 class TodoListViewController: UITableViewController {
     
-    var itemArray = ["Find Milk", "Buy Eggos", "Destroy Demogorgon"]
+    var itemArray = [Item]()
     
     let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+        
+        let item1 = Item()
+        item1.title = "Find Milk"
+        item1.done = true
+        itemArray.append(item1)
+        
+        let item2 = Item()
+        item2.title = "Buy Eggos"
+        itemArray.append(item2)
+        
+        let item3 = Item()
+        item3.title = "Destroy Demogorgon"
+        itemArray.append(item3)
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
             self.itemArray = items
         }
     }
@@ -29,7 +43,15 @@ class TodoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) //"ToDoItemCell" is the identifirer that is given in the attribute inspecture -> Table view Cell -> identifier
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        let item = itemArray[indexPath.row]
+        
+        cell.textLabel?.text = item.title
+        
+        if item.done {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
         
         return cell
     }
@@ -45,12 +67,9 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        // add/remove checkmark for selecting and deselection cell
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        
+        tableView.reloadData()
         
         //deselect the row after gets selected each time to remove the gray background 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -69,7 +88,9 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Itme", style: .default) { (action) in
             //the closure here will be invoked after completion entire code in the addButtonPressed()
-            self.itemArray.append(textField.text!)
+            let item = Item()
+            item.title = textField.text!
+            self.itemArray.append(item)
             
             //Save data in the phone memory
             self.defaults.set(self.itemArray, forKey: "TodoListArray")
