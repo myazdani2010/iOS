@@ -11,7 +11,7 @@ import UIKit
 //UITableViewController manages the table and takes care of delegate as well
 class TodoListViewController: UITableViewController {
     
-    let itemArray = ["Find Milk", "Buy Eggos", "Destroy Demogorgon"]
+    var itemArray = ["Find Milk", "Buy Eggos", "Destroy Demogorgon"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class TodoListViewController: UITableViewController {
     
     
     
-    //MRK - TableView Delegate Methods
+    //MARK - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("\(itemArray[indexPath.row])")
@@ -54,6 +54,30 @@ class TodoListViewController: UITableViewController {
         
     }
 
+    
+    
+    //MARK - Add new Items
+    
+    @IBAction func addButtonPressed(_ sender: Any) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Itme", style: .default) { (action) in
+            //the closure here will be invoked after completion entire code in the addButtonPressed()
+            self.itemArray.append(textField.text!)
+            self.tableView.reloadData()
+        }
+        
+        alert.addAction(action)
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+            textField = alertTextField
+        }
+        present(alert, animated: true, completion: nil)
+    }
+    
 
 }
 
