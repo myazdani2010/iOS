@@ -8,8 +8,8 @@
 
 import Foundation
 
-
-class Item : Encodable {
+//Codable is equal to Encodable and Decodable
+class Item : Codable {
     
     var title : String = ""
     var done : Bool = false

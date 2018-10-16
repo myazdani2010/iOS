@@ -32,9 +32,7 @@ class TodoListViewController: UITableViewController {
         item3.title = "Destroy Demogorgon"
         itemArray.append(item3)
         
-//        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-//            self.itemArray = items
-//        }
+        laodItems()
     }
     
     //MARK - Tableview Datasource Methods
@@ -116,6 +114,20 @@ class TodoListViewController: UITableViewController {
         }
         
         self.tableView.reloadData()
+    }
+    
+    
+    //load and decode the data
+    func laodItems() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Error decoding item array, \(error)")
+            }
+        }
     }
 
 }
