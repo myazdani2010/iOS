@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Todoey-->
+        <!--Items-->
         <scene sceneID="4B0-nC-gsy">
             <objects>
                 <tableViewController id="Uro-89-MHm" customClass="TodoListViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -39,7 +39,7 @@
                             <outlet property="delegate" destination="Uro-89-MHm" id="lCP-wy-7kA"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Todoey" id="nyB-BD-6jk">
+                    <navigationItem key="navigationItem" title="Items" id="nyB-BD-6jk">
                         <barButtonItem key="rightBarButtonItem" title="Item" systemItem="add" id="jNE-i6-9Oc">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
@@ -74,7 +74,7 @@
             </objects>
             <point key="canvasLocation" x="581.60000000000002" y="133.5832083958021"/>
         </scene>
-        <!--Category View Controller-->
+        <!--Todoey-->
         <scene sceneID="bLf-Bq-L5v">
             <objects>
                 <tableViewController id="CZk-xr-9gf" customClass="CategoryViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -97,7 +97,14 @@
                             <outlet property="delegate" destination="CZk-xr-9gf" id="hOy-3J-0Kc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="9S0-ag-qfK"/>
+                    <navigationItem key="navigationItem" title="Todoey" id="9S0-ag-qfK">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="XmW-XN-OeA">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="addButtonPressed:" destination="CZk-xr-9gf" id="6vf-5B-v1I"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="Uro-89-MHm" kind="show" identifier="goToItems" id="qb0-fp-iWM"/>
                     </connections>
