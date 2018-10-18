@@ -72,7 +72,7 @@ class TodoListViewController: UITableViewController {
         
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "Add Itme", style: .default) { (action) in
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //the closure here will be invoked after completion entire code in the addButtonPressed()
             
             let item = Item(context: self.context)
@@ -95,7 +95,7 @@ class TodoListViewController: UITableViewController {
     
     //MARK - Model manipulation Methods
     
-    //Encode and save data in the phone plist file
+    //save data in the local phone DB
     func saveItems() {
         
         do {
@@ -104,11 +104,11 @@ class TodoListViewController: UITableViewController {
             print("Error saving context, \(error)")
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     
-    //load and decode the data
+    //load data
     func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
         
         do{
