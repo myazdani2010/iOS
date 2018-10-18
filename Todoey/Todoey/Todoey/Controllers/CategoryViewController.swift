@@ -13,8 +13,11 @@ class CategoryViewController: UITableViewController {
     
     var categoryArray = [Category]()
     
+    //Singleton context
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
@@ -43,6 +46,7 @@ class CategoryViewController: UITableViewController {
     
     
     //MARK: - TableView Delegate Methods
+    
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        <#code#>
 //    }
@@ -50,7 +54,8 @@ class CategoryViewController: UITableViewController {
     
     
     //MARK: - Data manipulation methods
-
+    
+    //save to DB
     func saveCategories() {
         
         do {
@@ -59,10 +64,10 @@ class CategoryViewController: UITableViewController {
             print("Exception saving categories: \(error)")
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
-    
+    //load from DB
     func loadCategories(with request : NSFetchRequest<Category> = Category.fetchRequest()){
         
         do{
@@ -101,14 +106,7 @@ class CategoryViewController: UITableViewController {
         }
         present(alert, animated: true, completion: nil)
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
 }
