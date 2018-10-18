@@ -7,33 +7,24 @@
 //
 
 import UIKit
+import CoreData
 
 //UITableViewController manages the table and takes care of delegate as well
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
+    //get the singleton AppDelegate  context
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
+    
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        print(dataFilePath)
-        
-        let item1 = Item()
-        item1.title = "Find Milk"
-        item1.done = true
-        itemArray.append(item1)
-        
-        let item2 = Item()
-        item2.title = "Buy Eggos"
-        itemArray.append(item2)
-        
-        let item3 = Item()
-        item3.title = "Destroy Demogorgon"
-        itemArray.append(item3)
-        
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         laodItems()
     }
+    
+    
     
     //MARK - Tableview Datasource Methods
     
@@ -50,6 +41,8 @@ class TodoListViewController: UITableViewController {
         
         return cell
     }
+    
+    
     
     //numberOfRowInSection: to create the required number of cells in the table
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -83,8 +76,10 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Itme", style: .default) { (action) in
             //the closure here will be invoked after completion entire code in the addButtonPressed()
-            let item = Item()
+            
+            let item = Item(context: self.context)
             item.title = textField.text!
+            item.done = false
             self.itemArray.append(item)
             
             self.saveItems()
@@ -104,13 +99,11 @@ class TodoListViewController: UITableViewController {
     
     //Encode and save data in the phone plist file
     func saveItems() {
-        let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(self.itemArray)
-            try data.write(to: self.dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding item array, \(error)")
+            print("Error saving context, \(error)")
         }
         
         self.tableView.reloadData()
@@ -120,13 +113,12 @@ class TodoListViewController: UITableViewController {
     //load and decode the data
     func laodItems() {
         
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error decoding item array, \(error)")
-            }
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        do{
+            itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context: \(error)")
         }
     }
 
