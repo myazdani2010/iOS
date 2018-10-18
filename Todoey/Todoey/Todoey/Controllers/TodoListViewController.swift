@@ -19,7 +19,7 @@ class TodoListViewController: UITableViewController {
     
     override func viewDidLoad() {
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        laodItems()
+        loadItems()
     }
     
     
@@ -109,13 +109,15 @@ class TodoListViewController: UITableViewController {
     
     
     //load and decode the data
-    func laodItems(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
         
         do{
             itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context: \(error)")
         }
+        
+        tableView.reloadData()
     }
 
 
@@ -138,10 +140,20 @@ extension TodoListViewController: UISearchBarDelegate {
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
         
-        laodItems(with: request)
+        loadItems(with: request)
+    }
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        tableView.reloadData()
-        
+        if searchBar.text?.count == 0 {
+            
+            loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
     }
 }
 
