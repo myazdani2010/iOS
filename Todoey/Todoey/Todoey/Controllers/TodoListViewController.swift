@@ -40,7 +40,7 @@ class TodoListViewController: UITableViewController {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
         } else {
-            cell.textLabel?.text = "No items added"
+            cell.textLabel?.text = "No Items added"
         }
         
         return cell
@@ -59,28 +59,39 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if let item = items?[indexPath.row] {
+            do{
+                try realm.write {
+//                    realm.delete(item)
+                    item.done = !item.done
+                }
+            } catch {
+                print("Error savinf done status, \(error)")
+            }
+        }
+        
+        tableView.reloadData()
         //deselect the row after gets selected each time to remove the gray background 
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
 
     
-    
     //MARK - Add new Items
     
     @IBAction func addButtonPressed(_ sender: Any) {
         
         var textField = UITextField()
-        
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //the closure here will be invoked after completion entire code in the addButtonPressed()
-            
+
             if let currectCategory = self.selectedCategory {
                 do {
                     try self.realm.write {
                         let item = Item()
+                        item.dateCreated = Date()
                         item.title = textField.text!
                         currectCategory.items.append(item)
                     }
@@ -107,9 +118,7 @@ class TodoListViewController: UITableViewController {
     
     //load data
     func loadItems() {
-        
         items = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
-
         tableView.reloadData()
     }
 
@@ -120,33 +129,21 @@ class TodoListViewController: UITableViewController {
 
 //MARK - Search bar methods
 
-//extension TodoListViewController: UISearchBarDelegate {
-//    
-//    func searchBarSearchButtonClicked(_ searchBar : UISearchBar){
-//        
-//        let request : NSFetchRequest<Item> = Item.fetchRequest()
-//        print("searching for: \(searchBar.text!)")
-//        
-//        //[cd] stand for Case Diacritic insensitive
-//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//        request.predicate = predicate
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//        
-//        
-//        loadItems(with: request, predicate: predicate)
-//    }
-//    
-//    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        
-//        if searchBar.text?.count == 0 {
-//            
-//            loadItems()
-//            
-//            DispatchQueue.main.async {
-//                searchBar.resignFirstResponder()
-//            }
-//        }
-//    }
-//}
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar : UISearchBar){
+        items = items?.filter("title CONTAINS[dc] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+    
+}
 
