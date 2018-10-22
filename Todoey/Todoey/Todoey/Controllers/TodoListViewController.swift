@@ -40,7 +40,7 @@ class TodoListViewController: UITableViewController {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
         } else {
-            cell.textLabel?.text = "No items added"
+            cell.textLabel?.text = "No Items added"
         }
         
         return cell
@@ -62,6 +62,7 @@ class TodoListViewController: UITableViewController {
         if let item = items?[indexPath.row] {
             do{
                 try realm.write {
+//                    realm.delete(item)
                     item.done = !item.done
                 }
             } catch {
@@ -118,9 +119,7 @@ class TodoListViewController: UITableViewController {
     
     //load data
     func loadItems() {
-        
         items = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
-
         tableView.reloadData()
     }
 
