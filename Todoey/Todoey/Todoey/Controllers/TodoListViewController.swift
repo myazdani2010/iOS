@@ -59,6 +59,17 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if let item = items?[indexPath.row] {
+            do{
+                try realm.write {
+                    item.done = !item.done
+                }
+            } catch {
+                print("Error savinf done status, \(error)")
+            }
+        }
+        
+        tableView.reloadData()
         //deselect the row after gets selected each time to remove the gray background 
         tableView.deselectRow(at: indexPath, animated: true)
         
