@@ -36,7 +36,10 @@ class TodoListViewController: SwipteTableViewController {
             guard let navBar = navigationController?.navigationBar else {
                 fatalError("Navigation controller does not exist.")
             }
+            
             navBar.barTintColor = UIColor(hexString: colorHex)
+            title = selectedCategory!.name //change the title in the nav bar
+            
         }
         
     }
