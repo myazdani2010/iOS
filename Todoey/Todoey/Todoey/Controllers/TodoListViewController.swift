@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 //UITableViewController manages the table and takes care of delegate as well
 class TodoListViewController: SwipteTableViewController {
@@ -26,6 +27,7 @@ class TodoListViewController: SwipteTableViewController {
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 //        loadItems()
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
     }
     
     
@@ -42,6 +44,10 @@ class TodoListViewController: SwipteTableViewController {
             cell.accessoryType = item.done ? .checkmark : .none
         } else {
             cell.textLabel?.text = "No Items added"
+        }
+        if let color = UIColor(hexString: selectedCategory!.backgroundColor)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(items!.count)){
+            cell.backgroundColor = color
+            cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
         }
         
         return cell
