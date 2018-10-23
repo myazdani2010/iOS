@@ -20,6 +20,7 @@ class CategoryViewController: SwipteTableViewController {
         super.viewDidLoad()
         loadCategories()
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
     }
     
     
@@ -29,6 +30,7 @@ class CategoryViewController: SwipteTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
+        cell.backgroundColor = UIColor.randomFlat
         return cell
     }
     
