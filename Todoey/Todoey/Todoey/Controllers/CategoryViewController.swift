@@ -8,9 +8,8 @@
 
 import UIKit
 import RealmSwift
-import SwipeCellKit
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipteTableViewController {
     
     let realm = try! Realm()
     
@@ -28,9 +27,8 @@ class CategoryViewController: UITableViewController {
     
     //cellForRowAt
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
-        cell.delegate = self
         return cell
     }
     
@@ -82,13 +80,27 @@ class CategoryViewController: UITableViewController {
     }
     
     
+    //MARK - Delete Data from Swipte
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categories?[indexPath.row] {
+            do{
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("Error while deleting category, \(error)")
+            }
+        }
+    }
+    
     
     //MARK: - Add new Categories
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Todoey Category", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //the closure here will be invoked after completion entire code in the addButtonPressed()
@@ -107,39 +119,3 @@ class CategoryViewController: UITableViewController {
     
 }
 
-
-
-//MARK: - Swipe Cell Delegate Methods
-
-extension CategoryViewController : SwipeTableViewCellDelegate {
-    
-    //responsible for what should happened after user swipes to right
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-        
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-            print("Item deleted.")
-            
-            if let categoryForDeletion = self.categories?[indexPath.row] {
-                do{
-                    try self.realm.write {
-                        self.realm.delete(categoryForDeletion)
-                    }
-                } catch {
-                    print("Error while deleting category, \(error)")
-                }
-                
-                tableView.reloadData()
-            }
-        }
-        
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "delete-icon")
-        
-        return [deleteAction]
-    }
-    
-
-
-}
