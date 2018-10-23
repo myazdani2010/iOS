@@ -24,10 +24,21 @@ class TodoListViewController: SwipteTableViewController {
     }
     
     override func viewDidLoad() {
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-//        loadItems()
         tableView.rowHeight = 80.0
         tableView.separatorStyle = .none
+    }
+    
+    
+    // This will be called one the view is loaded and ready to apear.
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if let colorHex = selectedCategory?.backgroundColor{
+            guard let navBar = navigationController?.navigationBar else {
+                fatalError("Navigation controller does not exist.")
+            }
+            navBar.barTintColor = UIColor(hexString: colorHex)
+        }
+        
     }
     
     
