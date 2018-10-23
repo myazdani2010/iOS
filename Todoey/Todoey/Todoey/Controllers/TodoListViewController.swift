@@ -38,15 +38,28 @@ class TodoListViewController: SwipteTableViewController {
         guard let colorHex = selectedCategory?.backgroundColor else {
             fatalError("backgroundColor does not exist")
         }
+        //change the title in the nav bar
+        title = selectedCategory!.name
+        
+        updateNavBar(withHexCode: colorHex)
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        updateNavBar(withHexCode: "1D9BF6")
+    }
+    
+    
+    func updateNavBar(withHexCode colorHexCode : String){
+        
         guard let navBar = navigationController?.navigationBar else {
             fatalError("Navigation controller does not exist.")
         }
-        guard let navBarColor = UIColor(hexString: colorHex) else {
+        guard let navBarColor = UIColor(hexString: colorHexCode) else {
             fatalError("'colorHex' is empty or wrong format")
         }
         
-        //change the title in the nav bar
-        title = selectedCategory!.name
+
         //navigation bar background color
         navBar.barTintColor = navBarColor
         //assign contrast color for the Navigation bar title text
@@ -55,7 +68,6 @@ class TodoListViewController: SwipteTableViewController {
         navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
         //search bar background color
         searchBar.barTintColor = navBarColor
-        
     }
     
     
