@@ -13,4 +13,5 @@ class Category: Object {
     @objc dynamic var name : String = ""
     //forward relationship
     let items = List<Item>()
+    @objc dynamic var backgroundColor: String = ""
 }
