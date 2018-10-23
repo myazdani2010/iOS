@@ -19,6 +19,7 @@ class SwipteTableViewController: UITableViewController, SwipeTableViewCellDelega
     //TableView Datasource Methods
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //"Cell" is the identifirer that is given in the attribute inspecture -> Table view Cell -> identifier
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SwipeTableViewCell
         cell.delegate = self
         return cell

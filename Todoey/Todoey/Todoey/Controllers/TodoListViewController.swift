@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 //UITableViewController manages the table and takes care of delegate as well
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipteTableViewController {
     
     var items : Results<Item>?
     
@@ -25,6 +25,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 //        loadItems()
+        tableView.rowHeight = 80.0
     }
     
     
@@ -34,7 +35,7 @@ class TodoListViewController: UITableViewController {
     //cellForRowAt : used to display date in the cell at the given row
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) //"ToDoItemCell" is the identifirer that is given in the attribute inspecture -> Table view Cell -> identifier
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = items?[indexPath.row] {
             cell.textLabel?.text = item.title
@@ -76,6 +77,21 @@ class TodoListViewController: UITableViewController {
         
     }
 
+    
+    //MARK - Delete Data from Swipte
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let itemForDeletion = self.items?[indexPath.row] {
+            do{
+                try self.realm.write {
+                    self.realm.delete(itemForDeletion)
+                }
+            } catch {
+                print("Error while deleting Item, \(error)")
+            }
+        }
+    }
+    
     
     //MARK - Add new Items
     
