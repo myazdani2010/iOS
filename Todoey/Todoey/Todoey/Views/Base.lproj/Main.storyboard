@@ -41,12 +41,15 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Items" id="nyB-BD-6jk">
                         <barButtonItem key="rightBarButtonItem" title="Item" systemItem="add" id="jNE-i6-9Oc">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="Uro-89-MHm" id="prG-Xp-9fE"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="qv3-ec-Iig" id="3Ar-ed-egW"/>
+                        <outletCollection property="searchBar" destination="qv3-ec-Iig" collectionClass="NSMutableArray" id="eb0-nc-OnF"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Ox-v4-y3m" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
