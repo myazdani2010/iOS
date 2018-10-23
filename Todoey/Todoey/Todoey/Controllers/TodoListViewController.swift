@@ -35,25 +35,26 @@ class TodoListViewController: SwipteTableViewController {
     // This will be called one the view is loaded and ready to apear.
     override func viewWillAppear(_ animated: Bool) {
         
-        if let colorHex = selectedCategory?.backgroundColor {
-            guard let navBar = navigationController?.navigationBar else {
-                fatalError("Navigation controller does not exist.")
-            }
-            
-            //change the title in the nav bar
-            title = selectedCategory!.name
-            
-            if let navBarColor = UIColor(hexString: colorHex) {
-                //navigation bar background color
-                navBar.barTintColor = navBarColor
-                //assign contrast color for the Navigation bar title text
-                navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
-                //assign contrast color to the foreground of the navigation bar
-                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
-                //search bar background color
-                searchBar.barTintColor = navBarColor
-            }
+        guard let colorHex = selectedCategory?.backgroundColor else {
+            fatalError("backgroundColor does not exist")
         }
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation controller does not exist.")
+        }
+        guard let navBarColor = UIColor(hexString: colorHex) else {
+            fatalError("'colorHex' is empty or wrong format")
+        }
+        
+        //change the title in the nav bar
+        title = selectedCategory!.name
+        //navigation bar background color
+        navBar.barTintColor = navBarColor
+        //assign contrast color for the Navigation bar title text
+        navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+        //assign contrast color to the foreground of the navigation bar
+        navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
+        //search bar background color
+        searchBar.barTintColor = navBarColor
         
     }
     
