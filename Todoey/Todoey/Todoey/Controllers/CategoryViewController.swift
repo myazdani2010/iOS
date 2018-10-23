@@ -20,6 +20,7 @@ class CategoryViewController: SwipteTableViewController {
         super.viewDidLoad()
         loadCategories()
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
     }
     
     
@@ -29,6 +30,8 @@ class CategoryViewController: SwipteTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
+        let bgColor = categories?[indexPath.row].backgroundColor ?? "#FFFFFF"
+        cell.backgroundColor = UIColor(hexString: bgColor)
         return cell
     }
     
@@ -64,6 +67,7 @@ class CategoryViewController: SwipteTableViewController {
         
         do {
             try realm.write {
+                category.backgroundColor = UIColor.randomFlat.hexValue()
                 realm.add(category)
             }
         } catch {
